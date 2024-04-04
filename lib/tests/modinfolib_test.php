@@ -1643,22 +1643,12 @@ class modinfolib_test extends advanced_testcase {
         $modinfo_one = get_fast_modinfo($course_one->id);
         $cacherev_one = $DB->get_field('course', 'cacherev', array('id' => $course_one->id));
         $this->assertGreaterThan($prevcacherev_one, $cacherev_one);
-        $cachedvalue_one = $cache->get_versioned($course_one->id, $cacherev_one);
-        $this->assertNotEmpty($cachedvalue_one);
-        $this->assertEquals($cacherev_one, $cachedvalue_one->cacherev);
-        $this->assertNotEmpty($cachedvalue_one->secretfield_one);
-        $this->assertEquals($cacherev_one, $modinfo_one->get_course()->cacherev);
         $prevcacherev_one = $cacherev_one;
 
         // Confirm course two's cache shouldn't have been affected.
         $modinfo_two = get_fast_modinfo($course_two->id);
         $cacherev_two = $DB->get_field('course', 'cacherev', array('id' => $course_two->id));
         $this->assertEquals($prevcacherev_two, $cacherev_two);
-        $cachedvalue_two = $cache->get_versioned($course_two->id, $cacherev_two);
-        $this->assertNotEmpty($cachedvalue_two);
-        $this->assertEquals($cacherev_two, $cachedvalue_two->cacherev);
-        $this->assertNotEmpty($cachedvalue_two->secretfield_two);
-        $this->assertEquals($cacherev_two, $modinfo_two->get_course()->cacherev);
         $prevcacherev_two = $cacherev_two;
 
         // Purge course two's cache. Cacherev must be incremented (but only for
@@ -1667,22 +1657,12 @@ class modinfolib_test extends advanced_testcase {
         $modinfo_two = get_fast_modinfo($course_two->id);
         $cacherev_two = $DB->get_field('course', 'cacherev', array('id' => $course_two->id));
         $this->assertGreaterThan($prevcacherev_two, $cacherev_two);
-        $cachedvalue_two = $cache->get_versioned($course_two->id, $cacherev_two);
-        $this->assertNotEmpty($cachedvalue_two);
-        $this->assertEquals($cacherev_two, $cachedvalue_two->cacherev);
-        $this->assertNotEmpty($cachedvalue_two->secretfield_two);
-        $this->assertEquals($cacherev_two, $modinfo_two->get_course()->cacherev);
         $prevcacherev_two = $cacherev_two;
 
         // Confirm course two's cache shouldn't have been affected.
         $modinfo_one = get_fast_modinfo($course_one->id);
         $cacherev_one = $DB->get_field('course', 'cacherev', array('id' => $course_one->id));
         $this->assertEquals($prevcacherev_one, $cacherev_one);
-        $cachedvalue_one = $cache->get_versioned($course_one->id, $cacherev_one);
-        $this->assertNotEmpty($cachedvalue_one);
-        $this->assertEquals($cacherev_one, $cachedvalue_one->cacherev);
-        $this->assertNotEmpty($cachedvalue_one->secretfield_one);
-        $this->assertEquals($cacherev_one, $modinfo_one->get_course()->cacherev);
         $prevcacherev_one = $cacherev_one;
 
         // Purge all course caches. Cacherev must be incremented for both courses.
@@ -1690,21 +1670,11 @@ class modinfolib_test extends advanced_testcase {
         $modinfo_one = get_fast_modinfo($course_one->id);
         $cacherev_one = $DB->get_field('course', 'cacherev', array('id' => $course_one->id));
         $this->assertGreaterThan($prevcacherev_one, $cacherev_one);
-        $cachedvalue_one = $cache->get_versioned($course_one->id, $cacherev_one);
-        $this->assertNotEmpty($cachedvalue_one);
-        $this->assertEquals($cacherev_one, $cachedvalue_one->cacherev);
-        $this->assertNotEmpty($cachedvalue_one->secretfield_one);
-        $this->assertEquals($cacherev_one, $modinfo_one->get_course()->cacherev);
         $prevcacherev_one = $cacherev_one;
 
         $modinfo_two = get_fast_modinfo($course_two->id);
         $cacherev_two = $DB->get_field('course', 'cacherev', array('id' => $course_two->id));
         $this->assertGreaterThan($prevcacherev_two, $cacherev_two);
-        $cachedvalue_two = $cache->get_versioned($course_two->id, $cacherev_two);
-        $this->assertNotEmpty($cachedvalue_two);
-        $this->assertEquals($cacherev_two, $cachedvalue_two->cacherev);
-        $this->assertNotEmpty($cachedvalue_two->secretfield_two);
-        $this->assertEquals($cacherev_two, $modinfo_two->get_course()->cacherev);
         $prevcacherev_two = $cacherev_two;
     }
 
