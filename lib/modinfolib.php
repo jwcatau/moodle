@@ -860,33 +860,27 @@ class course_modinfo {
     public static function purge_course_caches(array $courseids = []): void {
         global $DB;
 
-        // If purging all course caches, use a recordset.
-        if ($courseids === []) {
-            $courses = $DB->get_recordset(
-                table: 'course',
-                conditions: null,
-                fields: 'id',
-            );
-        } else {
-            $courses = $DB->get_records_list(
-                table: 'course',
-                field: 'id',
-                values: $courseids,
-                fields: 'id',
-            );
+        // Purging might purge all course caches, so use a recordset and close it.
+		$select = '';
+		$params = null;
+        if (!empty($courseids)) {
+            [$sql, $params] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
+            $select = 'id ' . $sql;
         }
+
+        $courses = $DB->get_recordset_select(
+            table: 'course',
+            select: $select,
+            params: $params,
+            fields: 'id',
+        );
 
         // Purge each course's cache to make sure cache is recalculated next time
         // the course is viewed.
         foreach ($courses as $course) {
             self::purge_course_cache($course->id);
         }
-
-        // If purging all course caches, clean up the recordset iterator.
-        if ($courseids === []) {
-            $courses->close();
-        }
-
+		$courses->close();
     }
 
     /**
