@@ -861,8 +861,8 @@ class course_modinfo {
         global $DB;
 
         // Purging might purge all course caches, so use a recordset and close it.
-		$select = '';
-		$params = null;
+        $select = '';
+        $params = null;
         if (!empty($courseids)) {
             [$sql, $params] = $DB->get_in_or_equal($courseids, SQL_PARAMS_NAMED);
             $select = 'id ' . $sql;
@@ -880,7 +880,7 @@ class course_modinfo {
         foreach ($courses as $course) {
             self::purge_course_cache($course->id);
         }
-		$courses->close();
+        $courses->close();
     }
 
     /**
