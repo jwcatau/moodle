@@ -1672,7 +1672,7 @@ class modinfolib_test extends advanced_testcase {
 
         // Confirm course two and three's cache shouldn't have been affected.
         $modinfotwo = get_fast_modinfo($coursetwo->id);
-        $cacherevtwo = $DB->get_field('course', 'cacherev', (['id' => $coursetwo->id));
+        $cacherevtwo = $DB->get_field('course', 'cacherev', ['id' => $coursetwo->id]);
         $this->assertEquals($prevcacherevtwo, $cacherevtwo);
         $prevcacherevtwo = $cacherevtwo;
 
