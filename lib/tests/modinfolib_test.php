@@ -1574,7 +1574,7 @@ class modinfolib_test extends advanced_testcase {
     }
 
     /**
-     * Test for MDL-80985 for targeted multi-cache modinfo cache purging.
+     * Test for MDL-80985 for targeted multi-course modinfo cache purging.
      *
      * @covers \course_modinfo
      */
