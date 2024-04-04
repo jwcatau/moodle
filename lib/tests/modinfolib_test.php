@@ -1659,7 +1659,7 @@ class modinfolib_test extends advanced_testcase {
         $this->assertGreaterThan($prevcacherev_two, $cacherev_two);
         $prevcacherev_two = $cacherev_two;
 
-        // Confirm course two's cache shouldn't have been affected.
+        // Confirm course one's cache shouldn't have been affected.
         $modinfo_one = get_fast_modinfo($course_one->id);
         $cacherev_one = $DB->get_field('course', 'cacherev', array('id' => $course_one->id));
         $this->assertEquals($prevcacherev_one, $cacherev_one);
