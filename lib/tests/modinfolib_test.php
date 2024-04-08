@@ -1574,12 +1574,15 @@ class modinfolib_test extends advanced_testcase {
     }
 
     /**
-     * Test for MDL-80985 for targeted multi-course modinfo cache purging.
+     * Test the course_modinfo::purge_course_caches() function with a
+     * one-course array, a two-course array, and an empty array, and ensure
+     * that only the courses specified have their course cache version
+     * incremented (or all course caches if none specified).
      *
      * @covers \course_modinfo
      */
     public function test_multiple_modinfo_cache_purge(): void {
-        global $DB, $CFG;
+        global $DB;
 
         $this->resetAfterTest();
         $this->setAdminUser();
@@ -1588,18 +1591,30 @@ class modinfolib_test extends advanced_testcase {
         // Generate two courses and pre-requisite modules for targeted course
         // cache tests.
         $courseone = $this->getDataGenerator()->create_course(
-                ['format' => 'topics',
-                    'numsections' => 3],
-                    ['createsections' => true]);
+            [
+                'format' => 'topics',
+                'numsections' => 3
+            ],
+            [
+                'createsections' => true
+            ]);
         $coursetwo = $this->getDataGenerator()->create_course(
-                ['format' => 'topics',
-                    'numsections' => 3],
-                ['createsections' => true]);
+            [
+                'format' => 'topics',
+                'numsections' => 3
+            ],
+            [
+                'createsections' => true
+            ]);
 
         $coursethree = $this->getDataGenerator()->create_course(
-                ['format' => 'topics',
-                    'numsections' => 3],
-                ['createsections' => true]);
+            [
+                'format' => 'topics',
+                'numsections' => 3
+            ],
+            [
+                'createsections' => true
+            ]);
 
         // Make sure the cacherev is set for all three.
         $cacherevone = $DB->get_field('course', 'cacherev', ['id' => $courseone->id]);
@@ -1665,18 +1680,18 @@ class modinfolib_test extends advanced_testcase {
         // course one, check course two and three in next step).
         course_modinfo::purge_course_caches([$courseone->id]);
 
-        $modinfoone = get_fast_modinfo($courseone->id);
+        get_fast_modinfo($courseone->id);
         $cacherevone = $DB->get_field('course', 'cacherev', ['id' => $courseone->id]);
         $this->assertGreaterThan($prevcacherevone, $cacherevone);
         $prevcacherevone = $cacherevone;
 
         // Confirm course two and three's cache shouldn't have been affected.
-        $modinfotwo = get_fast_modinfo($coursetwo->id);
+        get_fast_modinfo($coursetwo->id);
         $cacherevtwo = $DB->get_field('course', 'cacherev', ['id' => $coursetwo->id]);
         $this->assertEquals($prevcacherevtwo, $cacherevtwo);
         $prevcacherevtwo = $cacherevtwo;
 
-        $modinfothree = get_fast_modinfo($coursethree->id);
+        get_fast_modinfo($coursethree->id);
         $cacherevthree = $DB->get_field('course', 'cacherev', ['id' => $coursethree->id]);
         $this->assertEquals($prevcacherevthree, $cacherevthree);
         $prevcacherevthree = $cacherevthree;
@@ -1685,38 +1700,35 @@ class modinfolib_test extends advanced_testcase {
         // course two and three, then check course one hasn't changed in next step).
         course_modinfo::purge_course_caches([$coursetwo->id, $coursethree->id]);
 
-        $modinfotwo = get_fast_modinfo($coursetwo->id);
+        get_fast_modinfo($coursetwo->id);
         $cacherevtwo = $DB->get_field('course', 'cacherev', ['id' => $coursetwo->id]);
         $this->assertGreaterThan($prevcacherevtwo, $cacherevtwo);
         $prevcacherevtwo = $cacherevtwo;
 
-        $modinfothree = get_fast_modinfo($coursethree->id);
+        get_fast_modinfo($coursethree->id);
         $cacherevthree = $DB->get_field('course', 'cacherev', ['id' => $coursethree->id]);
         $this->assertGreaterThan($prevcacherevthree, $cacherevthree);
         $prevcacherevthree = $cacherevthree;
 
         // Confirm course one's cache shouldn't have been affected.
-        $modinfoone = get_fast_modinfo($courseone->id);
+        get_fast_modinfo($courseone->id);
         $cacherevone = $DB->get_field('course', 'cacherev', ['id' => $courseone->id]);
         $this->assertEquals($prevcacherevone, $cacherevone);
         $prevcacherevone = $cacherevone;
 
         // Purge all course caches. Cacherev must be incremented for all three courses.
         course_modinfo::purge_course_caches();
-        $modinfoone = get_fast_modinfo($courseone->id);
+        get_fast_modinfo($courseone->id);
         $cacherevone = $DB->get_field('course', 'cacherev', ['id' => $courseone->id]);
         $this->assertGreaterThan($prevcacherevone, $cacherevone);
-        $prevcacherevone = $cacherevone;
 
-        $modinfotwo = get_fast_modinfo($coursetwo->id);
+        get_fast_modinfo($coursetwo->id);
         $cacherevtwo = $DB->get_field('course', 'cacherev', ['id' => $coursetwo->id]);
         $this->assertGreaterThan($prevcacherevtwo, $cacherevtwo);
-        $prevcacherevtwo = $cacherevtwo;
 
-        $modinfothree = get_fast_modinfo($coursethree->id);
+        get_fast_modinfo($coursethree->id);
         $cacherevthree = $DB->get_field('course', 'cacherev', ['id' => $coursethree->id]);
         $this->assertGreaterThan($prevcacherevthree, $cacherevthree);
-        $prevcacherevthree = $cacherevthree;
     }
 
 }
