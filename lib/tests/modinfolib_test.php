@@ -1593,27 +1593,27 @@ class modinfolib_test extends advanced_testcase {
         $courseone = $this->getDataGenerator()->create_course(
             [
                 'format' => 'topics',
-                'numsections' => 3
+                'numsections' => 3,
             ],
             [
-                'createsections' => true
+                'createsections' => true,
             ]);
         $coursetwo = $this->getDataGenerator()->create_course(
             [
                 'format' => 'topics',
-                'numsections' => 3
+                'numsections' => 3,
             ],
             [
-                'createsections' => true
+                'createsections' => true,
             ]);
 
         $coursethree = $this->getDataGenerator()->create_course(
             [
                 'format' => 'topics',
-                'numsections' => 3
+                'numsections' => 3,
             ],
             [
-                'createsections' => true
+                'createsections' => true,
             ]);
 
         // Make sure the cacherev is set for all three.
